@@ -1,0 +1,82 @@
+.Menu {
+  text-align: center;
+  background-color: #e8f21f;
+  min-height: 100vh;
+
+}
+
+.Menu-logo {
+  height: 10vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .Menu-logo {
+    animation: Menu-logo-spin infinite 10s linear;
+  }
+}
+
+.Menu-header {
+  /*background-color: #e8f21f;*/
+  /*min-height: 100vh;*/
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  /*align-items: center;*/
+  /*justify-content: center;*/
+  font-size: calc(10px + 2vmin);
+  color: black;
+}
+
+.Menu-link {
+  color: #61dafb;
+}
+
+@keyframes Menu-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+h3 {
+  text-align: center;
+}
+
+.menuColumn {
+  float: middle;
+  width: 25%;
+  display: inline;
+}
+
+.menuColumnMiddle {
+  text-align: center;
+  width: 100%;
+}
+
+/* Clear floats after the columns */
+/*.row:after {
+  content: "";
+  display: table;
+  clear: both;
+} */
+li {
+  vertical-align: middle;
+  text-align: center;
+  margin: 0 auto;
+  padding: none;
+}
+ 
+ul {
+  list-style-type:none;
+  vertical-align: middle;
+  text-align: center;
+  margin: 0 auto;
+  padding: none;
+}
+
+p {
+  vertical-align: middle;
+}
