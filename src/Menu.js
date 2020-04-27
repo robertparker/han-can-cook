@@ -6,20 +6,16 @@ import './Menu.css';
 import ModalLink from './ModalLink';
 import { GoogleSpreadsheet } from 'google-spreadsheet';
 
-const SPREADSHEET_ID = `10YPIxz7cMIVn6iFEZZ_WblygJRrfaRoi9Zae6jcN4Hw`;
-const doc = new GoogleSpreadsheet(SPREADSHEET_ID)
 
+const SPREADSHEET_ID = `10YPIxz7cMIVn6iFEZZ_WblygJRrfaRoi9Zae6jcN4Hw`;
+const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
+const doc = new GoogleSpreadsheet(SPREADSHEET_ID)
 // TY! https://stackoverflow.com/questions/60349027/cannot-set-property-jwtclient-of-undefined-trying-to-use-node-js-with-google
 async function accessSpreadsheet() {
-  await doc.useServiceAccountAuth({
-    client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    private_key: process.env.GOOGLE_PRIVATE_KEY
-  });
-
+  doc.useApiKey(googleApiKey);
   await doc.loadInfo(); // loads document properties and worksheets
   const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]
   const rows = await sheet.getRows()
-  console.log('hellooolollollol');
   return rows;
 
 }
