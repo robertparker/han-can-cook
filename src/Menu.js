@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import logo from './logo.svg';
@@ -10,21 +10,31 @@ import { GoogleSpreadsheet } from 'google-spreadsheet';
 const SPREADSHEET_ID = `10YPIxz7cMIVn6iFEZZ_WblygJRrfaRoi9Zae6jcN4Hw`;
 const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 const doc = new GoogleSpreadsheet(SPREADSHEET_ID)
+doc.useApiKey(googleApiKey);
 // TY! https://stackoverflow.com/questions/60349027/cannot-set-property-jwtclient-of-undefined-trying-to-use-node-js-with-google
-async function accessSpreadsheet() {
-  doc.useApiKey(googleApiKey);
+async function getMenuSheet() {
+  console.log('getting menuSheet');
   await doc.loadInfo(); // loads document properties and worksheets
   const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]
   const rows = await sheet.getRows()
   return rows;
+}
 
+async function getSectionsSheet() {
+  await doc.loadInfo(); // loads document properties and worksheets
+  const sheet = doc.sheetsByIndex[1]; // or use doc.sheetsById[id]
+  const rows = await sheet.getRows()
+  return rows;
 }
 
 function createMealDiv(idx, row) {
+  // if(row.Section == 'Takeout'){
+  //   return createTakeoutDiv(idx, row);
+  // }
   return (
     <div key={idx}>
-    <p>{row.Item}</p>
-    <p className="menuDescription">{row.Description}</p>
+    <p dangerouslySetInnerHTML={{__html:row.Item, sanitize: true}}></p>
+    <p className="menuDescription" dangerouslySetInnerHTML={{__html:row.Description, sanitize: true}}></p>
     </div>
   )
 }
@@ -37,38 +47,54 @@ function createTakeoutDiv(idx, row) {
   )
 }
 
-async function getDivs() {
-  let lunchDivs = [];
-  let dinnerDivs = [];
-  let takeoutDivs = [];
-  await accessSpreadsheet().then((rows) => {
-    for (let i = 0; i< rows.length; i++) {
-      let row = rows[i]
-      let idx = i;
-      if (row.Meal === 'Lunch'){
-        const div = createMealDiv(idx, row);
-        lunchDivs.push(div);
-      }
-      if (row.Meal === 'Dinner'){
-        const div = createMealDiv(idx, row);
-        dinnerDivs.push(div);
-      }
-      if (row.Meal === 'Takeout'){
-        const div = createTakeoutDiv(idx, row);
-        takeoutDivs.push(div);
-      }
+function createSection(num, menuItemData){
+  let menuItemDivs = [];
+  // for (let [sectionName, value] in menuItemData.entries()) {
+  Object.keys(menuItemData).forEach(function(key) {
+    let value = menuItemData[key];
+    if (value['location'] === num) {
+      menuItemDivs.push((
+        <div><h3 className="menuHeader" key={key}>{key}</h3>
+        { value['divs'] }<br /></div>
+      ))
     }
-  })
-  const returnDivs = {'Lunch': lunchDivs, 'Dinner': dinnerDivs, 'Takeout': takeoutDivs};
-  return returnDivs;
+  });
+  return menuItemDivs;
+
+}
+
+async function getMenuItems() {
+  // let lunchDivs = [];
+  // let dinnerDivs = [];
+  // let takeoutDivs = [];
+  let menuItemData = {};
+  // let sections = [];
+  await getSectionsSheet().then((rows) => {
+    for (let k = 0; k < rows.length; k++){
+      let row = rows[k];
+      menuItemData[row.SectionName] = {'location': row.Location, 'divs': []};
+    }
+  });
+
+  await getMenuSheet().then((rows) => {
+    for (let idx = 0; idx < rows.length; idx++) {
+      let row = rows[idx];
+      let divs = menuItemData[row.Section]['divs'];
+      const div = createMealDiv(idx, row);
+      divs.push(div);
+      menuItemData[row.Section]['divs'] = divs;
+    }
+  });
+
+  return menuItemData;
 }
 
 function Menu() {
   const [modalShow, setModalShow] = useState(false);
-  const [allDivs, setAllDivs] = useState('');
-  if (allDivs === ''){
-    getDivs().then((returnDivs) => {
-      setAllDivs(returnDivs);
+  const [menuItems, setMenuItems] = useState('');
+  if (menuItems == ''){
+    getMenuItems().then((menuItemData) => {
+      setMenuItems(menuItemData);
     });
   }
 
@@ -76,22 +102,19 @@ function Menu() {
     <div className="Menu">
       <header className="Menu-header">
         <Link to="/"><img src={logo} className="Menu-logo" alt="logo" /></Link>
-          Menu
-          <br />
-          <br />
-          <br />
+        {/* Section 1 */}
+          { createSection('1', menuItems) }
       </header>
       <ModalLink show={modalShow} onHide={() => setModalShow(false)} />
       <div className="row">
         <div className="menuColumn"></div>
         <div className="menuColumn">
-          <h3 className="menuHeader">Lunch</h3>
-          {allDivs.Lunch}
+          {/* Section 2 */}
+          { createSection('2', menuItems) }
         </div>
         <div className="menuColumn">
-
-          <h3 className="menuHeader">Dinner</h3>
-            {allDivs.Dinner}
+        {/* Section 3 */}
+        { createSection('3', menuItems) }
         </div>
         <div className="menuColumn"></div>
       </div>
@@ -99,13 +122,13 @@ function Menu() {
         <div className="menuColumnMiddle">
         <br />
         <br />
-          <h3 className="menuHeader">Takeout</h3>
-          {allDivs.Takeout}
+        {/* Section 4 */}
+        { createSection('4', menuItems) }
         </div>
       </div>
-      <br />
-      <br />
-  </div>
+        <br />
+        <br />
+    </div>
   );
 }
 
