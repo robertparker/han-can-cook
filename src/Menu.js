@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import logo from './logo.svg';
+import logo from './deborahLogo.svg';
 import './Menu.css';
 import ModalLink from './ModalLink';
 import { GoogleSpreadsheet } from 'google-spreadsheet';
@@ -102,6 +102,7 @@ function Menu() {
     <div className="Menu">
       <header className="Menu-header">
         <Link to="/"><img src={logo} className="Menu-logo" alt="logo" /></Link>
+        <br />
         {/* Section 1 */}
           { createSection('1', menuItems) }
       </header>
