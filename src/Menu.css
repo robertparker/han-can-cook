@@ -47,7 +47,13 @@ h3 {
 
 .menuColumn {
   float: middle;
-  width: 25%;
+  width: 35%;
+  display: inline;
+}
+
+.menuColumnPadding {
+  float: middle;
+  width: 15%;
   display: inline;
 }
 

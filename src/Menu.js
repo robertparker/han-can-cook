@@ -108,7 +108,7 @@ function Menu() {
       </header>
       <ModalLink show={modalShow} onHide={() => setModalShow(false)} />
       <div className="row">
-        <div className="menuColumn"></div>
+        <div className="menuColumnPadding"></div>
         <div className="menuColumn">
           {/* Section 2 */}
           { createSection('2', menuItems) }
@@ -117,7 +117,7 @@ function Menu() {
         {/* Section 3 */}
         { createSection('3', menuItems) }
         </div>
-        <div className="menuColumn"></div>
+        <div className="menuColumnPadding"></div>
       </div>
       <div className="row">
         <div className="menuColumnMiddle">
