@@ -8,10 +8,12 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Link to="/menu"><img src={logo} className="App-logo" alt="logo" /></Link>
-        <p>
+        <div className="siteTitle">
           Better Next Day
-        </p>
-          by Hannah Robertson
+        </div>
+        <div className="siteSubtitle">
+          🖤 Hanhith
+          </div>
       </header>
     </div>
   );

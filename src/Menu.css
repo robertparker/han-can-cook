@@ -1,3 +1,8 @@
+@font-face { 
+  font-family: 'Sacramento-Regular'; 
+  src: url('./fonts/Sacramento-Regular.ttf'); 
+} 
+
 .Menu {
   text-align: center;
   background-color: #e8f21f;
@@ -97,13 +102,25 @@ p {
   color: #838584;
   /*margin: 0 auto;*/
   /*padding: none;*/
-  font-style: italic;
+  /*font-style: italic;*/
   margin-bottom: 20px !important;
   padding-left: 40px;
   padding-right: 40px;
+  font-family: 'Open Sans Condensed';
+  /*font-weight: 300;*/
+  font-size: 3vh;
+}
+
+.menuItem {
+  font-family: 'Open Sans Condensed';
+  font-size: 4vh;
+  font-weight: bold;
 }
 
 .menuHeader {
+  font-family: 'Sacramento-Regular';
+  /*font-weight: bold;*/
+  font-size: 7vh;
   padding-bottom: 20px
 }
 a {

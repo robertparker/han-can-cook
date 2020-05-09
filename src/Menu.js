@@ -33,7 +33,7 @@ function createMealDiv(idx, row) {
   // }
   return (
     <div key={idx}>
-    <p dangerouslySetInnerHTML={{__html:row.Item, sanitize: true}}></p>
+    <p className="menuItem" dangerouslySetInnerHTML={{__html:row.Item, sanitize: true}}></p>
     <p className="menuDescription" dangerouslySetInnerHTML={{__html:row.Description, sanitize: true}}></p>
     </div>
   )
@@ -54,7 +54,7 @@ function createSection(num, menuItemData){
     let value = menuItemData[key];
     if (value['location'] === num) {
       menuItemDivs.push((
-        <div><h3 className="menuHeader" key={key}>{key}</h3>
+        <div><h3 className="menuHeader" key={key} dangerouslySetInnerHTML={{__html:key, sanitize: true}}></h3>
         { value['divs'] }<br /></div>
       ))
     }
